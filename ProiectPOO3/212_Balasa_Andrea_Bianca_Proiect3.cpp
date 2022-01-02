@@ -1,5 +1,11 @@
 #include<iostream>
 #include<string>
+#include<vector>
+#include<list>
+#include<map>
+#include<iterator>
+
+//la hrana am creat hrane diferite si nu e bine tre sa vad cum fac cu mapul ala
 
 using namespace std;
 
@@ -1264,31 +1270,296 @@ public:
 
 	void meniu()
 	{
+		vector<Animal*>vectorAnimale;
+		list<Client*>listaClienti;
+		map<Hrana*, int>mapHrana;
 
+		list<Client>::iterator  it;
+		map<Hrana*, int>::iterator itr;
+
+		int indexAnimale = 0;
+		int indexClienti = 0;
+
+		int input = -1;
+
+		while (input != 0)
+		{
+			cout << "\nALEGETI OPTIUNEA: " << endl;
+			cout << " 0. Exit\n";
+			cout << " 1. Creeaza pisica\n";
+			cout << " 2. Creeaza pui pisica\n";
+			cout << " 3. Creeaza caine\n";
+
+			cout << " 4. Creeaza adult\n";
+			cout << " 5. Creeaza pensionar\n";
+			
+			cout << " 6. Creeaza hrana uscata\n";
+			cout << " 7. Creeaza hrana umeda\n";
+
+			cout << " 8. Afiseaza toate pisicile\n";
+			cout << " 9. Afiseaza toti puii de pisica\n";
+			cout << "10. Afiseaza toti cainii\n";
+			cout << "11. Afiseaza toate animalele\n";
+			
+			cout << "12. Afiseaza toti adultii\n";
+			cout << "13. Afiseaza toti pensionarii\n";
+			cout << "14. Afiseaza toti clientii\n";
+
+			cout << "15. Afiseaza toata hrana uscata\n";
+			cout << "16. Afiseaza toata hrana umeda\n";
+			cout << "17. Afiseaza toata hrana\n";
+
+			
+
+			cin >> input;
+			switch (input)
+			{
+			case 0:
+				cout << "Iesire din program! " << endl;
+				break;
+
+			case 1:
+			{
+				Animal* p = new Pisica();
+				cin >> *p;
+				vectorAnimale.push_back(p);
+				break;
+			}
+
+			case 2:
+			{
+				Animal* pp = new PuiPisica();
+				cin >> *pp;
+				vectorAnimale.push_back(pp);
+				break;
+			}
+
+			case 3:
+			{
+				Animal* c = new Caine();
+				cin >> *c;
+				vectorAnimale.push_back(c);
+				break;
+			}
+
+			case 4:
+			{
+				Client* cl = new Adult();
+				cin >> *cl;
+				listaClienti.push_back(cl);
+				break;
+			}
+
+			case 5:
+			{
+				Client* pen = new Pensionar();
+				cin >> *pen;
+				listaClienti.push_back(pen);
+				break;
+			}
+
+			case 6:
+			{
+				HranaUscata* hu = new HranaUscata();
+				cin >> *hu;
+				mapHrana.insert({ hu, hu->getGrame()});
+				break;
+			}
+
+			case 7:
+			{
+				HranaUmeda* hum = new HranaUmeda();
+				cin >> *hum;
+				mapHrana.insert({ hum, hum->getNrPlicuri() });
+
+				break;
+			}
+
+			case 8:
+			{
+				bool estePisicaAdaugata = false;
+				for (int i = 0; i < vectorAnimale.size(); i++)
+				{
+					if ((typeid(*vectorAnimale[i])) == (typeid(Pisica)))
+					{
+						cout << dynamic_cast<Pisica&>(*vectorAnimale[i]) << endl;
+						estePisicaAdaugata = true;
+					}
+
+				}
+
+				if (estePisicaAdaugata == false)
+				{
+					cout << "Nu avem pisici adaugate!\n";
+				}
+
+				break;
+			}
+
+			case 9:
+			{
+				bool estePuiPisicaAdaugat = false;
+				for (int i = 0; i < vectorAnimale.size(); i++)
+				{
+					if ((typeid(*vectorAnimale[i])) == (typeid(PuiPisica)))
+					{
+						cout << dynamic_cast<PuiPisica&>(*vectorAnimale[i]) << endl;
+						estePuiPisicaAdaugat = true;
+					}
+				}
+
+				if (estePuiPisicaAdaugat == false)
+				{
+					cout << "Nu avem pui de pisici adaugati!\n";
+				}
+				break;
+			}
+
+			case 10:
+			{
+				bool esteCaineAdaugat = false;
+				for (int i = 0; i < vectorAnimale.size(); i++)
+				{
+					if ((typeid(*vectorAnimale[i])) == (typeid(Caine)))
+					{
+						cout << dynamic_cast<Caine&>(*vectorAnimale[i]) << endl;
+						esteCaineAdaugat = true;
+					}
+
+				}
+
+				if (esteCaineAdaugat == false)
+				{
+					cout << "Nu avem caini adaugati!\n";
+				}
+				break;
+			}
+
+			case 11:
+			{
+				if (vectorAnimale.size())
+				{
+					for (int i = 0; i < vectorAnimale.size(); i++)
+					{
+						cout << *vectorAnimale[i] << '\n';
+					}
+				}
+				else
+					cout << "Nu exista niciun animal adaugat!\n";
+					
+				break;
+			}
+
+			case 12:
+			{
+				bool esteAdultAdaugat = false;
+
+
+				for (auto it = listaClienti.begin(); it != listaClienti.end(); ++it)
+				{
+					if ( typeid(**it).name() == typeid(Adult).name() )
+					{
+						cout << static_cast<Adult&>(**it) << endl;
+						esteAdultAdaugat = true;
+					}
+					
+				
+				}
+
+				if (esteAdultAdaugat == false)
+				{
+					cout << "Nu avem adulti adaugati!\n";
+				}
+
+				
+				break;
+			}
+
+			case 13:
+			{
+				bool estePensionarAdaugat = false;
+
+
+				for (auto it = listaClienti.begin(); it != listaClienti.end(); ++it)
+				{
+					if (typeid(**it).name() == typeid(Pensionar).name())
+					{
+						cout << static_cast<Pensionar&>(**it) << endl;
+						estePensionarAdaugat = true;
+					}
+
+
+				}
+
+				if (estePensionarAdaugat == false)
+				{
+					cout << "Nu avem adulti adaugati!\n";
+				}
+				break;
+			}
+
+			case 14:
+			{
+				if (listaClienti.size())
+				{
+					for (auto it = listaClienti.begin(); it != listaClienti.end(); ++it)
+					
+						cout << **it << '\n';
+				}
+				break;
+			}
+
+			case 15:
+			{
+				cout << "\tNumeHranaUscata\tGramaj\n";
+				for (itr = mapHrana.begin(); itr != mapHrana.end(); ++itr)
+					if(typeid(*itr->first) ==typeid(HranaUscata))
+					{
+						cout << '\t' << (itr->first)->getNume()
+							<< '\t' << '\t' << itr->second << '\n';
+					}
+				break;
+			}
+
+			case 16:
+			{
+				cout << "\tNumeHranaUmeda\tGramaj\n";
+				for (itr = mapHrana.begin(); itr != mapHrana.end(); ++itr)
+					if (typeid(*itr->first) == typeid(HranaUmeda))
+					{
+						cout << '\t' << (itr->first)->getNume()
+							<< '\t' << '\t' << itr->second << '\n';
+					}
+				break;
+			}
+
+			case 17:
+			{
+				cout << "\tNumeHrana\tGramaj\n";
+				for (itr = mapHrana.begin(); itr != mapHrana.end(); ++itr)
+					if (typeid(*itr->first) == typeid(HranaUscata))
+					{
+						cout << '\t' << (itr->first)->getNume()
+							<< '\t' << '\t' << itr->second << " " << "grame" << '\n';
+					}
+					else
+					{
+						cout << '\t' << (itr->first)->getNume()
+							<< '\t' << '\t' << itr->second << " " << "plicuri" << '\n';
+					}
+				break;
+			}
+
+			default:
+				cout << "Optiunea nu exista! " << endl;
+				break;
+			}
+		}
 	}
 
 };
 
 Meniu* Meniu::obiect = 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 int main()
