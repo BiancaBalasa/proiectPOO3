@@ -6,8 +6,6 @@
 #include<iterator>
 
 
-//la hrana am creat hrane diferite si nu e bine tre sa vad cum fac cu mapul ala
-
 using namespace std;
 
 class CitireAfisare
