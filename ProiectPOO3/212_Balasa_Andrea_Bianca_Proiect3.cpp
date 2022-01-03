@@ -5,6 +5,7 @@
 #include<map>
 #include<iterator>
 
+
 //la hrana am creat hrane diferite si nu e bine tre sa vad cum fac cu mapul ala
 
 using namespace std;
@@ -15,6 +16,25 @@ public:
 	virtual istream& citire(istream&) = 0;
 	virtual ostream& afisare(ostream&) const = 0;
 };
+
+class ExceptiePretHrana :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Pretul ar trebui sa fie mai mare decat 0. Va rugam introduceti din nou :";
+	}
+}exceptiePretHrana;
+
+class ExceptieTipAnimal :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Hrana este disponibila doar pentru pisici sau caini. Va rugam introduceti din nou :";
+	}
+}exceptieTipAnimal;
+
 
 class Hrana
 {
@@ -124,10 +144,42 @@ istream& Hrana::citire(istream& in)
 	in >> this->nume;
 
 	cout << "\nPret: " ;
-	in >> this->pret;
+	try
+	{
+		in >> this->pret;
+		if (this->pret <= 0)
+		{
+			throw exceptiePretHrana;
+		}
+	}
+	catch (ExceptiePretHrana& e)
+	{
+		while (this->pret <= 0)
+		{
+			cout << e.what() << endl;
+			in >> this->pret;
+		}
+	}
+	
 
 	cout << "\nTip animal: ";
-	in >> this->tipAnimal;
+	try
+	{
+		in >> this->tipAnimal;
+		if (this->tipAnimal != "caine" && this->tipAnimal != "pisica" && this->tipAnimal != "Caine" && this->tipAnimal != "Pisica")
+		{
+			throw exceptieTipAnimal;
+		}
+	}
+	catch (ExceptieTipAnimal& e)
+	{
+		while (this->tipAnimal != "caine" && this->tipAnimal != "pisica" && this->tipAnimal != "Caine" && this->tipAnimal != "Pisica")
+		{
+			cout << e.what() << endl;
+			in >> this->tipAnimal;
+		}
+	}
+	
 
 	cout << "\nEste pentru probleme speciale: ";
 	in >> this->estePtProblemeSpeciale;
@@ -162,6 +214,15 @@ double Hrana::calculeazaDiscountHrana()
 		discount = 10 * 0.01 * this->pret;
 	return discount;
 }
+
+class ExceptieGrame :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Cantitatea de hrana uscata ar trebuie sa fie mai mare decat 0. Va rugam introduceti din nou :";
+	}
+}exceptieGrame;
 
 class HranaUscata : public Hrana
 {
@@ -245,7 +306,23 @@ istream& HranaUscata::citire(istream& in)
 {
 	Hrana::citire(in);
 	cout << "\nGrame: ";
-	in >> this->grame;
+	try 
+	{
+		in >> this->grame;
+		if (this->grame <= 0)
+		{
+			throw exceptieGrame;
+		}
+	}
+	catch (ExceptieGrame& e)
+	{
+		while (this->grame <= 0)
+		{
+			cout << e.what() << endl;
+			in >> this->grame;
+		}
+	}
+	
 	cout << endl;
 	return in;
 }
@@ -273,6 +350,15 @@ double HranaUscata::calculeazaDiscountHranaUscata()
 		return discountTotal + ((Hrana)*this).calculeazaDiscountHrana();
 
 }
+
+class ExceptieNrPlicuri :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Cantitatea de hrana umeda ar trebuie sa fie mai mare decat 0. Va rugam introduceti din nou :";
+	}
+}exceptieNrPlicuri;
 
 class HranaUmeda : virtual public Hrana
 {
@@ -356,7 +442,23 @@ istream& HranaUmeda::citire(istream& in)
 {
 	Hrana::citire(in);
 	cout << "\nNumar plicuri: ";
-	in >> this->nrPlicuri;
+	try
+	{
+		in >> this->nrPlicuri;
+		if (this->nrPlicuri <= 0)
+		{
+			throw exceptieNrPlicuri;
+		}
+	}
+	catch (ExceptieNrPlicuri& e)
+	{
+		while (this->nrPlicuri <= 0)
+		{
+			cout << e.what() << endl;
+			in >> this->nrPlicuri;
+		}
+	}
+	
 	cout << endl;
 	return in;
 }
@@ -386,6 +488,43 @@ double HranaUmeda::calculeazaDiscountHranaUmeda()
 	else
 		return discountTotal + ((Hrana)*this).calculeazaDiscountHrana();
 }
+
+class ExceptieSexAnimal :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Sexul ar trebui sa fie M sau F. Va rugam introduceti din nou :";
+	}
+}exceptieSexAnimal;
+
+class ExceptieVarstaAnimal :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Varsta ar trebui sa fie mai mare sau egala cu 0. Va rugam introduceti din nou :";
+	}
+}exceptieVarstaAnimal;
+
+class ExceptieGreutateAnimal :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Greutatea ar trebui sa fie mai mare decat 0. Va rugam introduceti din nou :";
+	}
+}exceptieGreutateAnimal;
+
+class ExceptiePretAnimal :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Pretul ar trebui sa fie mai mare decat 0. Va rugam introduceti din nou :";
+	}
+}exceptiePretAnimal;
+
 
 class Animal
 {
@@ -512,16 +651,85 @@ istream& Animal::citire(istream& in)
 {
 	cout << "\nNume: ";
 	in >> this->nume;
+
 	cout << "\nSex: ";
-	in >> this->sex;
+	try
+	{
+		in >> this->sex;
+		if (this->sex != 'M' && this->sex != 'F')
+		{
+			throw exceptieSexAnimal;
+		}
+	}
+	catch (ExceptieSexAnimal& e)
+	{
+		while (this->sex != 'M' && this->sex != 'F')
+		{
+			cout << e.what() << endl;
+			in >> this->sex;
+		}
+	}
+	
 	cout << "\nVarsta: ";
-	in >> this->varsta;
+	try
+	{
+		in >> this->varsta;
+		if (this->varsta < 0)
+		{
+			throw exceptieVarstaAnimal;
+		}
+	}
+	catch (ExceptieVarstaAnimal& e)
+	{
+		while (this->varsta < 0)
+		{
+			cout << e.what() << endl;
+			in >> this->varsta;
+		}
+	}
+	
+
 	cout << "\nGreutate: ";
-	in >> this->greutate;
+	try
+	{
+		in >> this->greutate;
+		if (this->greutate <= 0)
+		{
+			throw exceptieGreutateAnimal;
+		}
+	}
+	catch (ExceptieGreutateAnimal& e)
+	{
+		if (this->greutate <= 0)
+		{
+			cout << e.what() << endl;
+			in >> this->greutate;
+		}
+	}
+	
+
 	cout << "\nPret: ";
-	in >> this->pret;
+	try
+	{
+		in >> this->pret;
+		if (this->pret <= 0)
+		{
+			throw exceptiePretAnimal;
+		}
+	}
+	catch(ExceptiePretAnimal& e)
+	{
+		if (this->pret <= 0)
+		{
+			cout << e.what() << endl;
+			in >> this->pret;
+		}
+	}
+	
+
 	cout << "\nAre probleme speciale: ";
 	in >> this->areProblemeSpeciale;
+
 	return in;
 }
 
@@ -879,6 +1087,24 @@ bool Caine::verificaObezitate()
 	return obezitateCaine;
 }
 
+class ExceptieRating :public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Ratingul ar trebui sa fie intre 0 si 5. Va rugam introduceti din nou :";
+	}
+}exceptieRating;
+
+class ExceptieSexClient : public exception
+{
+public:
+	virtual const char* what() const throw() {
+
+		return "Sexul ar trebui sa fie M sau F. Va rugam introduceti din nou :";
+	}
+}exceptieSex;
+
 class Client
 {
 protected:
@@ -986,13 +1212,49 @@ istream& Client::citire(istream& in)
 {
 	cout << "\nNume prenume: ";
 	in >> this->numePrenume;
+
 	cout << "\nSex: ";
-	in >> this->sex;
+	try
+	{
+		in >> this->sex;
+		if (this->sex != 'M' && this->sex != 'F')
+		{
+			throw exceptieSex;
+		}
+	}
+	catch (ExceptieSexClient& e)
+	{
+		while (this->sex != 'M' && this->sex != 'F')
+		{
+			cout << e.what() << endl;
+			in >> this->sex;
+		}
+	}
+	
 	cout << "\nRating: ";
-	in >> this->rating;
+	try
+	{
+		in >> this->rating;
+		if (this->rating < 0 || this->rating > 5)
+		{
+			throw exceptieRating;
+		}
+	}
+	catch (ExceptieRating& e)
+	{
+		while (this->rating < 0 || this->rating > 5)
+		{
+			cout << e.what() << endl;
+			in >> this->rating;
+		}
+
+	}
+	
 	cout << "\nAnimale detinute: ";
 	in >> this->animaleDetinute;
 	return in;
+	
+	
 }
 //overload operator<<
 ostream& operator<<(ostream& out, const Client& c)
@@ -1309,7 +1571,6 @@ public:
 			cout << "16. Afiseaza toata hrana umeda\n";
 			cout << "17. Afiseaza toata hrana\n";
 
-			
 
 			cin >> input;
 			switch (input)
